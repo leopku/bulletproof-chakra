@@ -1,3 +1,4 @@
+import { ChakraProvider } from '@chakra-ui/react';
 import * as React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { HelmetProvider } from 'react-helmet-async';
@@ -30,24 +31,26 @@ type AppProviderProps = {
 
 export const AppProvider = ({ children }: AppProviderProps) => {
   return (
-    <React.Suspense
-      fallback={
-        <div className="flex items-center justify-center w-screen h-screen">
-          <Spinner size="xl" />
-        </div>
-      }
-    >
-      <ErrorBoundary FallbackComponent={ErrorFallback}>
-        <HelmetProvider>
-          <QueryClientProvider client={queryClient}>
-            {process.env.NODE_ENV !== 'test' && <ReactQueryDevtools />}
-            <Notifications />
-            <AuthProvider>
-              <Router>{children}</Router>
-            </AuthProvider>
-          </QueryClientProvider>
-        </HelmetProvider>
-      </ErrorBoundary>
-    </React.Suspense>
+    <ChakraProvider>
+      <React.Suspense
+        fallback={
+          <div className="flex items-center justify-center w-screen h-screen">
+            <Spinner size="xl" />
+          </div>
+        }
+      >
+        <ErrorBoundary FallbackComponent={ErrorFallback}>
+          <HelmetProvider>
+            <QueryClientProvider client={queryClient}>
+              {process.env.NODE_ENV !== 'test' && <ReactQueryDevtools />}
+              <Notifications />
+              <AuthProvider>
+                <Router>{children}</Router>
+              </AuthProvider>
+            </QueryClientProvider>
+          </HelmetProvider>
+        </ErrorBoundary>
+      </React.Suspense>
+    </ChakraProvider>
   );
 };
